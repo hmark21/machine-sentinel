@@ -10,15 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PreguntasRouteImport } from './routes/preguntas'
 import { Route as TipsRouteImport } from './routes/tips'
+import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
+import { Route as AuthenticatedMaquinasIndexRouteImport } from './routes/_authenticated/maquinas.index'
+import { Route as AuthenticatedMaquinasIdRouteImport } from './routes/_authenticated/maquinas.$id'
+import { Route as AuthenticatedSolicitudesNuevaRouteImport } from './routes/_authenticated/solicitudes.nueva'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComoFuncionaRoute = ComoFuncionaRouteImport.update({
@@ -46,6 +55,28 @@ const TipsRoute = TipsRouteImport.update({
   path: '/tips',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
+  id: '/inicio',
+  path: '/inicio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMaquinasIndexRoute =
+  AuthenticatedMaquinasIndexRouteImport.update({
+    id: '/maquinas/',
+    path: '/maquinas/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMaquinasIdRoute = AuthenticatedMaquinasIdRouteImport.update({
+  id: '/maquinas/$id',
+  path: '/maquinas/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSolicitudesNuevaRoute =
+  AuthenticatedSolicitudesNuevaRouteImport.update({
+    id: '/solicitudes/nueva',
+    path: '/solicitudes/nueva',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +85,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/inicio': typeof AuthenticatedInicioRoute
+  '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
+  '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
+  '/maquinas/': typeof AuthenticatedMaquinasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,34 +97,68 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/inicio': typeof AuthenticatedInicioRoute
+  '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
+  '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
+  '/maquinas': typeof AuthenticatedMaquinasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/como-funciona': typeof ComoFuncionaRoute
   '/contacto': typeof ContactoRoute
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/_authenticated/inicio': typeof AuthenticatedInicioRoute
+  '/_authenticated/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
+  '/_authenticated/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
+  '/_authenticated/maquinas/': typeof AuthenticatedMaquinasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/como-funciona' | '/contacto' | '/login' | '/preguntas' | '/tips'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/como-funciona' | '/contacto' | '/login' | '/preguntas' | '/tips'
-  id:
-    | '__root__'
     | '/'
     | '/como-funciona'
     | '/contacto'
     | '/login'
     | '/preguntas'
     | '/tips'
+    | '/inicio'
+    | '/maquinas/$id'
+    | '/solicitudes/nueva'
+    | '/maquinas/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/como-funciona'
+    | '/contacto'
+    | '/login'
+    | '/preguntas'
+    | '/tips'
+    | '/inicio'
+    | '/maquinas/$id'
+    | '/solicitudes/nueva'
+    | '/maquinas'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/como-funciona'
+    | '/contacto'
+    | '/login'
+    | '/preguntas'
+    | '/tips'
+    | '/_authenticated/inicio'
+    | '/_authenticated/maquinas/$id'
+    | '/_authenticated/solicitudes/nueva'
+    | '/_authenticated/maquinas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ComoFuncionaRoute: typeof ComoFuncionaRoute
   ContactoRoute: typeof ContactoRoute
   LoginRoute: typeof LoginRoute
@@ -104,6 +173,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/como-funciona': {
@@ -141,11 +217,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TipsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/inicio': {
+      id: '/_authenticated/inicio'
+      path: '/inicio'
+      fullPath: '/inicio'
+      preLoaderRoute: typeof AuthenticatedInicioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/maquinas/': {
+      id: '/_authenticated/maquinas/'
+      path: '/maquinas'
+      fullPath: '/maquinas/'
+      preLoaderRoute: typeof AuthenticatedMaquinasIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/maquinas/$id': {
+      id: '/_authenticated/maquinas/$id'
+      path: '/maquinas/$id'
+      fullPath: '/maquinas/$id'
+      preLoaderRoute: typeof AuthenticatedMaquinasIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/solicitudes/nueva': {
+      id: '/_authenticated/solicitudes/nueva'
+      path: '/solicitudes/nueva'
+      fullPath: '/solicitudes/nueva'
+      preLoaderRoute: typeof AuthenticatedSolicitudesNuevaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
+  AuthenticatedMaquinasIdRoute: typeof AuthenticatedMaquinasIdRoute
+  AuthenticatedSolicitudesNuevaRoute: typeof AuthenticatedSolicitudesNuevaRoute
+  AuthenticatedMaquinasIndexRoute: typeof AuthenticatedMaquinasIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedInicioRoute: AuthenticatedInicioRoute,
+  AuthenticatedMaquinasIdRoute: AuthenticatedMaquinasIdRoute,
+  AuthenticatedSolicitudesNuevaRoute: AuthenticatedSolicitudesNuevaRoute,
+  AuthenticatedMaquinasIndexRoute: AuthenticatedMaquinasIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ComoFuncionaRoute: ComoFuncionaRoute,
   ContactoRoute: ContactoRoute,
   LoginRoute: LoginRoute,
