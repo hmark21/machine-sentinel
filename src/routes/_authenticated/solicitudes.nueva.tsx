@@ -45,10 +45,10 @@ function Nueva() {
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
-    if (!maquina) return setError("Elige una máquina.");
-    if (descripcion.trim().length < 3) return setError("Describe el problema (mínimo 3 caracteres).");
-    if (descripcion.length > 1000) return setError("La descripción es demasiado larga.");
-    if (foto && foto.size > 10 * 1024 * 1024) return setError("La foto no debe pesar más de 10 MB.");
+    if (!maquina) { setError("Elige una máquina."); return; }
+    if (descripcion.trim().length < 3) { setError("Describe el problema (mínimo 3 caracteres)."); return; }
+    if (descripcion.length > 1000) { setError("La descripción es demasiado larga."); return; }
+    if (foto && foto.size > 10 * 1024 * 1024) { setError("La foto no debe pesar más de 10 MB."); return; }
     setError("");
     setCargando(true);
     let foto_url: string | null = null;
@@ -57,7 +57,7 @@ function Nueva() {
       const up = await supabase.storage.from("fotos").upload(path, foto);
       if (up.error) {
         setCargando(false);
-        return setError("No se pudo subir la foto.");
+        { setError("No se pudo subir la foto."); return; }
       }
       foto_url = path;
     }
@@ -71,7 +71,7 @@ function Nueva() {
       creado_por: me!.id,
     });
     setCargando(false);
-    if (error) return setError("No se pudo enviar la solicitud.");
+    if (error) { setError("No se pudo enviar la solicitud."); return; }
     toast.success("Solicitud enviada");
     qc.invalidateQueries({ queryKey: ["solicitudes"] });
     navigate({ to: "/solicitudes" });

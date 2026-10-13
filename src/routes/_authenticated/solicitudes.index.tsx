@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/solicitudes/")({
 });
 
 const selectCls = "h-11 rounded-md border border-input bg-card px-3 font-semibold";
-type Sol = NonNullable<ReturnType<typeof useQuery<Awaited<ReturnType<typeof solicitudesQuery.queryFn>>>>["data"]>[number];
+type Sol = Awaited<ReturnType<NonNullable<typeof solicitudesQuery.queryFn>>>[number];
 
 function Bandeja() {
   const qc = useQueryClient();
@@ -38,16 +38,16 @@ function Bandeja() {
   const lista = sol.filter((s) => (!estado || s.estado === estado) && (!prioridad || s.prioridad === prioridad));
   const conteo = Object.fromEntries(ESTADOS.map((e) => [e, sol.filter((s) => s.estado === e).length]));
 
-  async function actualizar(s: Sol, cambios: Record<string, unknown>) {
+  async function actualizar(s: Sol, cambios: { estado?: string; tecnico_id?: string | null }) {
     const { error } = await supabase.from("solicitudes").update(cambios).eq("id", s.id);
-    if (error) return toast.error("No se pudo actualizar");
+    if (error) { toast.error("No se pudo actualizar"); return; }
     toast.success("Solicitud actualizada");
     qc.invalidateQueries({ queryKey: ["solicitudes"] });
   }
 
   function cambiarEstado(s: Sol, nuevo: string) {
     if (nuevo === "completada") return setCompletar(s);
-    const cambios: Record<string, unknown> = { estado: nuevo };
+    const cambios: { estado?: string; tecnico_id?: string | null } = { estado: nuevo };
     if (me?.rol === "tecnico" && !s.tecnico_id && (nuevo === "en_proceso" || nuevo === "asignada")) cambios.tecnico_id = me.id;
     actualizar(s, cambios);
   }
@@ -125,7 +125,7 @@ function Bandeja() {
   );
 }
 
-function CompletarDialog({ sol, onClose, meId }: { sol: Sol | null; onClose: () => void; meId?: string }) {
+function CompletarDialog({ sol, onClose, meId }: { sol: Sol | null; onClose: () => void; meId?: string | undefined }) {
   const qc = useQueryClient();
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
@@ -137,8 +137,8 @@ function CompletarDialog({ sol, onClose, meId }: { sol: Sol | null; onClose: () 
     const paro = Number(fd.get("paro"));
     const trabajo = String(fd.get("trabajo") ?? "").trim();
     const resultado = String(fd.get("resultado") ?? "").trim();
-    if (!Number.isFinite(paro) || paro < 0 || paro > 100000) return setError("Escribe el tiempo de paro en minutos.");
-    if (!trabajo || !resultado) return setError("Escribe el trabajo realizado y el resultado.");
+    if (!Number.isFinite(paro) || paro < 0 || paro > 100000) { setError("Escribe el tiempo de paro en minutos."); return; }
+    if (!trabajo || !resultado) { setError("Escribe el trabajo realizado y el resultado."); return; }
     setCargando(true);
     const tecnico = sol.tecnico_id ?? meId;
     const r1 = await supabase.from("servicios").insert({
@@ -147,7 +147,7 @@ function CompletarDialog({ sol, onClose, meId }: { sol: Sol | null; onClose: () 
     });
     const r2 = await supabase.from("solicitudes").update({ estado: "completada", tiempo_paro_min: Math.round(paro), tecnico_id: tecnico }).eq("id", sol.id);
     setCargando(false);
-    if (r1.error || r2.error) return setError("No se pudo guardar.");
+    if (r1.error || r2.error) { setError("No se pudo guardar."); return; }
     toast.success("Mantenimiento completado y registrado en el historial");
     qc.invalidateQueries({ queryKey: ["solicitudes"] });
     qc.invalidateQueries({ queryKey: ["servicios"] });

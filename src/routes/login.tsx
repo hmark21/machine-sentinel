@@ -29,12 +29,12 @@ function Login() {
     const fd = new FormData(e.currentTarget);
     const email = String(fd.get("email") ?? "").trim();
     const password = String(fd.get("password") ?? "");
-    if (!email || !password) return setError("Escribe tu usuario (correo) y tu clave.");
+    if (!email || !password) { setError("Escribe tu usuario (correo) y tu clave."); return; }
     setCargando(true);
     setError("");
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setCargando(false);
-    if (error) return setError("Usuario o clave incorrectos. Revisa tus datos e intenta de nuevo.");
+    if (error) { setError("Usuario o clave incorrectos. Revisa tus datos e intenta de nuevo."); return; }
     navigate({ to: "/inicio" });
   }
 

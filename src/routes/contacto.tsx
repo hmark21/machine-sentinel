@@ -39,14 +39,14 @@ function Page() {
     const fd = Object.fromEntries(new FormData(e.currentTarget));
     const r = schema.safeParse(fd);
     if (!r.success) {
-      setErrores(Object.fromEntries(r.error.issues.map((i) => [i.path[0], i.message])));
+      setErrores(Object.fromEntries(r.error.issues.map((i) => [String(i.path[0]), i.message])));
       return;
     }
     setErrores({});
     setCargando(true);
     const { error } = await supabase.from("contactos").insert(r.data as { nombre: string; empresa: string; email: string; mensaje: string });
     setCargando(false);
-    if (error) return toast.error("No se pudo enviar. Intenta de nuevo.");
+    if (error) { toast.error("No se pudo enviar. Intenta de nuevo."); return; }
     setEnviado(true);
   }
 
@@ -74,13 +74,13 @@ function Page() {
               <div key={n} className="space-y-2">
                 <Label htmlFor={n} className="text-base font-semibold">{l}</Label>
                 <Input id={n} name={n} type={t} className="h-12 text-base" />
-                {errores[n] && <p className="font-semibold text-danger">{errores[n]}</p>}
+                {errores[n as string] && <p className="font-semibold text-danger">{errores[n as string]}</p>}
               </div>
             ))}
             <div className="space-y-2">
               <Label htmlFor="mensaje" className="text-base font-semibold">Mensaje</Label>
               <Textarea id="mensaje" name="mensaje" rows={5} className="text-base" />
-              {errores.mensaje && <p className="font-semibold text-danger">{errores.mensaje}</p>}
+              {errores["mensaje"] && <p className="font-semibold text-danger">{errores["mensaje"]}</p>}
             </div>
             <Button type="submit" variant="action" size="lg" className="w-full" disabled={cargando}>
               {cargando ? "Enviando…" : "Enviar mensaje"}

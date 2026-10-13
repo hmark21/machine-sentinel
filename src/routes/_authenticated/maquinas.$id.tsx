@@ -49,7 +49,7 @@ function Panel() {
 
   async function cambiarEstado(cid: string, estado: S) {
     const { error } = await supabase.from("componentes").update({ estado }).eq("id", cid);
-    if (error) return toast.error("No se pudo actualizar");
+    if (error) { toast.error("No se pudo actualizar"); return; }
     toast.success("Estado actualizado");
     qc.invalidateQueries({ queryKey: ["maquinas"] });
     qc.invalidateQueries({ queryKey: ["alertas"] });

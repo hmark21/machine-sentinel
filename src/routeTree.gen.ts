@@ -19,6 +19,7 @@ import { Route as TipsRouteImport } from './routes/tips'
 import { Route as AuthenticatedHistorialRouteImport } from './routes/_authenticated/historial'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
+import { Route as AuthenticatedSupervisorRouteImport } from './routes/_authenticated/supervisor'
 import { Route as AuthenticatedMaquinasIndexRouteImport } from './routes/_authenticated/maquinas.index'
 import { Route as AuthenticatedMaquinasIdRouteImport } from './routes/_authenticated/maquinas.$id'
 import { Route as AuthenticatedSolicitudesIndexRouteImport } from './routes/_authenticated/solicitudes.index'
@@ -73,6 +74,11 @@ const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSupervisorRoute = AuthenticatedSupervisorRouteImport.update({
+  id: '/supervisor',
+  path: '/supervisor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMaquinasIndexRoute =
   AuthenticatedMaquinasIndexRouteImport.update({
     id: '/maquinas/',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/historial': typeof AuthenticatedHistorialRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/supervisor': typeof AuthenticatedSupervisorRoute
   '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/maquinas/': typeof AuthenticatedMaquinasIndexRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/historial': typeof AuthenticatedHistorialRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/perfil': typeof AuthenticatedPerfilRoute
+  '/supervisor': typeof AuthenticatedSupervisorRoute
   '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/maquinas': typeof AuthenticatedMaquinasIndexRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/historial': typeof AuthenticatedHistorialRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
+  '/_authenticated/supervisor': typeof AuthenticatedSupervisorRoute
   '/_authenticated/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/_authenticated/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/_authenticated/maquinas/': typeof AuthenticatedMaquinasIndexRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/inicio'
     | '/perfil'
+    | '/supervisor'
     | '/maquinas/$id'
     | '/solicitudes/nueva'
     | '/maquinas/'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/historial'
     | '/inicio'
     | '/perfil'
+    | '/supervisor'
     | '/maquinas/$id'
     | '/solicitudes/nueva'
     | '/maquinas'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/_authenticated/historial'
     | '/_authenticated/inicio'
     | '/_authenticated/perfil'
+    | '/_authenticated/supervisor'
     | '/_authenticated/maquinas/$id'
     | '/_authenticated/solicitudes/nueva'
     | '/_authenticated/maquinas/'
@@ -275,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPerfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/supervisor': {
+      id: '/_authenticated/supervisor'
+      path: '/supervisor'
+      fullPath: '/supervisor'
+      preLoaderRoute: typeof AuthenticatedSupervisorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/maquinas/': {
       id: '/_authenticated/maquinas/'
       path: '/maquinas'
@@ -310,6 +329,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistorialRoute: typeof AuthenticatedHistorialRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedSupervisorRoute: typeof AuthenticatedSupervisorRoute
   AuthenticatedMaquinasIdRoute: typeof AuthenticatedMaquinasIdRoute
   AuthenticatedSolicitudesNuevaRoute: typeof AuthenticatedSolicitudesNuevaRoute
   AuthenticatedMaquinasIndexRoute: typeof AuthenticatedMaquinasIndexRoute
@@ -320,6 +340,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistorialRoute: AuthenticatedHistorialRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedSupervisorRoute: AuthenticatedSupervisorRoute,
   AuthenticatedMaquinasIdRoute: AuthenticatedMaquinasIdRoute,
   AuthenticatedSolicitudesNuevaRoute: AuthenticatedSolicitudesNuevaRoute,
   AuthenticatedMaquinasIndexRoute: AuthenticatedMaquinasIndexRoute,

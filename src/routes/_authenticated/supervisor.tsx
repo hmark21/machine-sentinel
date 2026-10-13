@@ -55,7 +55,7 @@ function Asignacion() {
 
   async function asignar(id: string, tecnico_id: string, estado: string) {
     const { error } = await supabase.from("solicitudes").update({ tecnico_id: tecnico_id || null, estado: tecnico_id && ["enviada", "en_revision"].includes(estado) ? "asignada" : estado }).eq("id", id);
-    if (error) return toast.error("No se pudo asignar");
+    if (error) { toast.error("No se pudo asignar"); return; }
     toast.success("Tarea asignada");
     qc.invalidateQueries({ queryKey: ["solicitudes"] });
   }
@@ -152,7 +152,7 @@ function Usuarios({ meId }: { meId?: string }) {
     const form = e.currentTarget;
     const fd = new FormData(form);
     const data = { nombre: String(fd.get("nombre")), email: String(fd.get("email")), password: String(fd.get("password")), rol: String(fd.get("rol")) as Rol };
-    if (data.password.length < 8) return toast.error("La clave debe tener al menos 8 caracteres");
+    if (data.password.length < 8) { toast.error("La clave debe tener al menos 8 caracteres"); return; }
     setCargando(true);
     try {
       await crear({ data });

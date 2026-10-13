@@ -27,9 +27,9 @@ function Perfil() {
   async function guardar(e: React.FormEvent) {
     e.preventDefault();
     const n = (nombre ?? me!.nombre).trim();
-    if (!n || n.length > 100) return toast.error("Escribe un nombre válido");
+    if (!n || n.length > 100) { toast.error("Escribe un nombre válido"); return; }
     const { error } = await supabase.from("profiles").update({ nombre: n }).eq("id", me!.id);
-    if (error) return toast.error("No se pudo guardar");
+    if (error) { toast.error("No se pudo guardar"); return; }
     toast.success("Perfil actualizado");
     qc.invalidateQueries({ queryKey: ["me"] });
     qc.invalidateQueries({ queryKey: ["usuarios"] });
