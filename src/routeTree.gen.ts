@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PreguntasRouteImport } from './routes/preguntas'
+import { Route as TipsRouteImport } from './routes/tips'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComoFuncionaRoute = ComoFuncionaRouteImport.update({
+  id: '/como-funciona',
+  path: '/como-funciona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreguntasRoute = PreguntasRouteImport.update({
+  id: '/preguntas',
+  path: '/preguntas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TipsRoute = TipsRouteImport.update({
+  id: '/tips',
+  path: '/tips',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contacto': typeof ContactoRoute
+  '/login': typeof LoginRoute
+  '/preguntas': typeof PreguntasRoute
+  '/tips': typeof TipsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contacto': typeof ContactoRoute
+  '/login': typeof LoginRoute
+  '/preguntas': typeof PreguntasRoute
+  '/tips': typeof TipsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/contacto': typeof ContactoRoute
+  '/login': typeof LoginRoute
+  '/preguntas': typeof PreguntasRoute
+  '/tips': typeof TipsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/como-funciona' | '/contacto' | '/login' | '/preguntas' | '/tips'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/como-funciona' | '/contacto' | '/login' | '/preguntas' | '/tips'
+  id:
+    | '__root__'
+    | '/'
+    | '/como-funciona'
+    | '/contacto'
+    | '/login'
+    | '/preguntas'
+    | '/tips'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComoFuncionaRoute: typeof ComoFuncionaRoute
+  ContactoRoute: typeof ContactoRoute
+  LoginRoute: typeof LoginRoute
+  PreguntasRoute: typeof PreguntasRoute
+  TipsRoute: typeof TipsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/como-funciona': {
+      id: '/como-funciona'
+      path: '/como-funciona'
+      fullPath: '/como-funciona'
+      preLoaderRoute: typeof ComoFuncionaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preguntas': {
+      id: '/preguntas'
+      path: '/preguntas'
+      fullPath: '/preguntas'
+      preLoaderRoute: typeof PreguntasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tips': {
+      id: '/tips'
+      path: '/tips'
+      fullPath: '/tips'
+      preLoaderRoute: typeof TipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComoFuncionaRoute: ComoFuncionaRoute,
+  ContactoRoute: ContactoRoute,
+  LoginRoute: LoginRoute,
+  PreguntasRoute: PreguntasRoute,
+  TipsRoute: TipsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
