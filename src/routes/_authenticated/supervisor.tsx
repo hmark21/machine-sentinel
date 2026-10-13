@@ -67,7 +67,7 @@ function Asignacion() {
           <tr>{["Folio", "Máquina", "Prioridad", "Estado", "Técnico"].map((h) => <th key={h} className="px-4 py-3 font-bold">{h}</th>)}</tr>
         </thead>
         <tbody>
-          {[...abiertas].sort((a, b) => orden[a.prioridad] - orden[b.prioridad]).map((s) => (
+          {[...abiertas].sort((a, b) => (orden[a.prioridad] ?? 9) - (orden[b.prioridad] ?? 9)).map((s) => (
             <tr key={s.id} className="border-b">
               <td className="px-4 py-3 font-bold">#{s.folio}</td>
               <td className="px-4 py-3"><b>{s.maquinas?.nombre}</b><br /><span className="text-sm text-muted-foreground">{s.componentes?.nombre}</span></td>
@@ -140,7 +140,7 @@ function Kpi({ l, v }: { l: string; v: string }) {
   return <div className="panel border-l-8 border-l-primary p-5"><p className="font-display text-4xl font-bold">{v}</p><p className="font-semibold text-muted-foreground">{l}</p></div>;
 }
 
-function Usuarios({ meId }: { meId?: string }) {
+function Usuarios({ meId }: { meId?: string | undefined }) {
   const qc = useQueryClient();
   const { data: usuarios = [] } = useQuery(usuariosQuery);
   const crear = useServerFn(crearUsuario);

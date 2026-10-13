@@ -140,7 +140,7 @@ function CompletarDialog({ sol, onClose, meId }: { sol: Sol | null; onClose: () 
     if (!Number.isFinite(paro) || paro < 0 || paro > 100000) { setError("Escribe el tiempo de paro en minutos."); return; }
     if (!trabajo || !resultado) { setError("Escribe el trabajo realizado y el resultado."); return; }
     setCargando(true);
-    const tecnico = sol.tecnico_id ?? meId;
+    const tecnico = sol.tecnico_id ?? meId ?? null;
     const r1 = await supabase.from("servicios").insert({
       solicitud_id: sol.id, maquina_id: sol.maquina_id, componente_id: sol.componente_id, tecnico_id: tecnico,
       turno: sol.turno, trabajo: trabajo.slice(0, 1000), resultado: resultado.slice(0, 500), tiempo_paro_min: Math.round(paro),
