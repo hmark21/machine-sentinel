@@ -16,9 +16,12 @@ import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PreguntasRouteImport } from './routes/preguntas'
 import { Route as TipsRouteImport } from './routes/tips'
+import { Route as AuthenticatedHistorialRouteImport } from './routes/_authenticated/historial'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedMaquinasIndexRouteImport } from './routes/_authenticated/maquinas.index'
 import { Route as AuthenticatedMaquinasIdRouteImport } from './routes/_authenticated/maquinas.$id'
+import { Route as AuthenticatedSolicitudesIndexRouteImport } from './routes/_authenticated/solicitudes.index'
 import { Route as AuthenticatedSolicitudesNuevaRouteImport } from './routes/_authenticated/solicitudes.nueva'
 
 const IndexRoute = IndexRouteImport.update({
@@ -55,9 +58,19 @@ const TipsRoute = TipsRouteImport.update({
   path: '/tips',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedHistorialRoute = AuthenticatedHistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
   id: '/inicio',
   path: '/inicio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMaquinasIndexRoute =
@@ -71,6 +84,12 @@ const AuthenticatedMaquinasIdRoute = AuthenticatedMaquinasIdRouteImport.update({
   path: '/maquinas/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSolicitudesIndexRoute =
+  AuthenticatedSolicitudesIndexRouteImport.update({
+    id: '/solicitudes/',
+    path: '/solicitudes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSolicitudesNuevaRoute =
   AuthenticatedSolicitudesNuevaRouteImport.update({
     id: '/solicitudes/nueva',
@@ -85,10 +104,13 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/historial': typeof AuthenticatedHistorialRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
   '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/maquinas/': typeof AuthenticatedMaquinasIndexRoute
+  '/solicitudes/': typeof AuthenticatedSolicitudesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -97,10 +119,13 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/historial': typeof AuthenticatedHistorialRoute
   '/inicio': typeof AuthenticatedInicioRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
   '/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/maquinas': typeof AuthenticatedMaquinasIndexRoute
+  '/solicitudes': typeof AuthenticatedSolicitudesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -111,10 +136,13 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/preguntas': typeof PreguntasRoute
   '/tips': typeof TipsRoute
+  '/_authenticated/historial': typeof AuthenticatedHistorialRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/maquinas/$id': typeof AuthenticatedMaquinasIdRoute
   '/_authenticated/solicitudes/nueva': typeof AuthenticatedSolicitudesNuevaRoute
   '/_authenticated/maquinas/': typeof AuthenticatedMaquinasIndexRoute
+  '/_authenticated/solicitudes/': typeof AuthenticatedSolicitudesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -125,10 +153,13 @@ export interface FileRouteTypes {
     | '/login'
     | '/preguntas'
     | '/tips'
+    | '/historial'
     | '/inicio'
+    | '/perfil'
     | '/maquinas/$id'
     | '/solicitudes/nueva'
     | '/maquinas/'
+    | '/solicitudes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -137,10 +168,13 @@ export interface FileRouteTypes {
     | '/login'
     | '/preguntas'
     | '/tips'
+    | '/historial'
     | '/inicio'
+    | '/perfil'
     | '/maquinas/$id'
     | '/solicitudes/nueva'
     | '/maquinas'
+    | '/solicitudes'
   id:
     | '__root__'
     | '/'
@@ -150,10 +184,13 @@ export interface FileRouteTypes {
     | '/login'
     | '/preguntas'
     | '/tips'
+    | '/_authenticated/historial'
     | '/_authenticated/inicio'
+    | '/_authenticated/perfil'
     | '/_authenticated/maquinas/$id'
     | '/_authenticated/solicitudes/nueva'
     | '/_authenticated/maquinas/'
+    | '/_authenticated/solicitudes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,11 +254,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TipsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/historial': {
+      id: '/_authenticated/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof AuthenticatedHistorialRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/inicio': {
       id: '/_authenticated/inicio'
       path: '/inicio'
       fullPath: '/inicio'
       preLoaderRoute: typeof AuthenticatedInicioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/maquinas/': {
@@ -238,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMaquinasIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/solicitudes/': {
+      id: '/_authenticated/solicitudes/'
+      path: '/solicitudes'
+      fullPath: '/solicitudes/'
+      preLoaderRoute: typeof AuthenticatedSolicitudesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/solicitudes/nueva': {
       id: '/_authenticated/solicitudes/nueva'
       path: '/solicitudes/nueva'
@@ -249,17 +307,23 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedHistorialRoute: typeof AuthenticatedHistorialRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedMaquinasIdRoute: typeof AuthenticatedMaquinasIdRoute
   AuthenticatedSolicitudesNuevaRoute: typeof AuthenticatedSolicitudesNuevaRoute
   AuthenticatedMaquinasIndexRoute: typeof AuthenticatedMaquinasIndexRoute
+  AuthenticatedSolicitudesIndexRoute: typeof AuthenticatedSolicitudesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedHistorialRoute: AuthenticatedHistorialRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedMaquinasIdRoute: AuthenticatedMaquinasIdRoute,
   AuthenticatedSolicitudesNuevaRoute: AuthenticatedSolicitudesNuevaRoute,
   AuthenticatedMaquinasIndexRoute: AuthenticatedMaquinasIndexRoute,
+  AuthenticatedSolicitudesIndexRoute: AuthenticatedSolicitudesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
